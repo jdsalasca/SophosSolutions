@@ -28,6 +28,7 @@ class HomeScreenViewModel @Inject constructor(
     }
 
     fun getUserInformation(idUsuario: String, clave: String) {
+
         viewModelScope.launch(Dispatchers.IO) {
 
             val user = ssUserRespositoryImp.login(

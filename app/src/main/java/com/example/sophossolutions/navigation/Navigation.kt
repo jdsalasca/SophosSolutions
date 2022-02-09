@@ -1,3 +1,5 @@
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -6,7 +8,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.sophossolutions.navigation.Screen
 import com.example.sophossolutions.presentation.LoginScreen
-import com.example.sophossolutions.presentation.SeeDocuments
+import com.example.sophossolutions.presentation.seedocuments.SeeDocuments
 import com.example.sophossolutions.presentation.components.DocumentView
 import com.example.sophossolutions.presentation.components.HandlePermissions
 import com.example.sophossolutions.presentation.home.HomeScreen
@@ -15,12 +17,14 @@ import com.example.sophossolutions.presentation.map.GoogleMaps
 import com.example.sophossolutions.presentation.senddocument.DocumentForm
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 
+@RequiresApi(Build.VERSION_CODES.P)
 @ExperimentalPermissionsApi
 @Composable
 fun Navigation() {
 
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = Screen.MainScreen.route) {
+
         composable(route = Screen.MainScreen.route) {
             LoginScreen(navController = navController)
         }

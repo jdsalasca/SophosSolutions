@@ -1,7 +1,6 @@
 package com.example.sophossolutions.presentation.map
 
 import com.example.sophossolutions.models.Item
-import com.example.sophossolutions.models.Office
 import com.google.android.libraries.maps.model.LatLng
 
 data class LocationsState(

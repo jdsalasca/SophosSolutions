@@ -58,7 +58,6 @@ class SendDocumentViewModel @Inject constructor(
             var citiesExport = Cities(citiesByApi)
 
 
-            Log.d("Que llega al viewModel", office.data.toString())
 
             cities.value = citiesExport
 
@@ -67,7 +66,6 @@ class SendDocumentViewModel @Inject constructor(
     fun newDocument (document: DocumentsItem) {
         viewModelScope.launch ( Dispatchers.IO) {
             var response = documentRepositoryImp.newDocument(document = document)
-            Log.d("Documento creado", response.toString())
 
         }
     }

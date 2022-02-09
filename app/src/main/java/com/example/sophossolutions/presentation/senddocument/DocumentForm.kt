@@ -1,6 +1,7 @@
 package com.example.sophossolutions.presentation.senddocument
 
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.net.Uri
@@ -49,11 +50,9 @@ fun DocumentForm(
     navController: NavController
 
 ) {
-
     val viewModel: SendDocumentViewModel = hiltViewModel()
-
     HandlePermissions()
-    var documentToSend =
+    val documentToSend =
         remember { mutableStateOf(DocumentsItem("", "", "", "", "", "", "", "", "", "")) }
 
     val documentType = remember { mutableStateOf("") }
@@ -83,7 +82,7 @@ fun DocumentForm(
 
         } else {
             val source = ImageDecoder
-                .createSource(context.contentResolver, it)
+                .createSource(context.contentResolver, it!!)
             bitmap.value = ImageDecoder.decodeBitmap(source)
         }
     }
@@ -124,9 +123,6 @@ fun DocumentForm(
 
         showLoading = false
 
-
-
-
         Scaffold(
 
             topBar = {
@@ -146,8 +142,7 @@ fun DocumentForm(
         ) {
             Box(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color.White),
+                    .fillMaxSize(),
                 contentAlignment = Alignment.TopCenter
             ) {
                 Column(
@@ -155,7 +150,6 @@ fun DocumentForm(
                         .fillMaxWidth()
                         .fillMaxHeight(0.99f)
                         .clip(RoundedCornerShape(20.dp))
-                        .background(Color.White)
                         .padding(18.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
@@ -499,18 +493,26 @@ fun DocumentForm(
 
                             ExtendedFloatingActionButton(
                                 onClick = {
-                                    documentToSend.value.Adjunto = attachedImage.value
-                                    documentToSend.value.Apellido = lastNameValue.value
-                                    documentToSend.value.Nombre = firstNameValue.value
-                                    documentToSend.value.TipoId = documentTypes[documentTypeSelecter]
-                                    documentToSend.value.Identificacion = idNumberValue.value
-                                    documentToSend.value.Ciudad = cities[selectedIndexCity]
-                                    documentToSend.value.TipoAdjunto = attachmentType[selectedIndexattachmentType]
-                                    documentToSend.value.Correo =  emailValue
 
-                                    viewModel.newDocument(documentToSend.value)
+                                    if ( checkfields(context,attachedImage.value,lastNameValue.value, firstNameValue.value,
+                                            documentTypes[documentTypeSelecter],idNumberValue.value,  cities[selectedIndexCity],attachmentType[selectedIndexattachmentType],
+                                            emailValue )){
 
-                                    Log.d("Document to send", documentToSend.value.toString())
+                                        documentToSend.value.Adjunto = attachedImage.value
+                                        documentToSend.value.Apellido = lastNameValue.value
+                                        documentToSend.value.Nombre = firstNameValue.value
+                                        documentToSend.value.TipoId = documentTypes[documentTypeSelecter]
+                                        documentToSend.value.Identificacion = idNumberValue.value
+                                        documentToSend.value.Ciudad = cities[selectedIndexCity]
+                                        documentToSend.value.TipoAdjunto = attachmentType[selectedIndexattachmentType]
+                                        documentToSend.value.Correo =  emailValue
+
+                                        viewModel.newDocument(documentToSend.value)
+
+                                        Log.d("Document to send", documentToSend.value.toString())
+
+                                    }
+
 
                                 },
                                 backgroundColor = Color.Red,
@@ -534,6 +536,10 @@ fun DocumentForm(
             }
 
         }
+
+
+
+
 
 
     }
@@ -628,6 +634,30 @@ fun ComposeMenu(
             }
         }
     }
+}
+fun checkfields (context: Context, attachment : String?, lastname : String?, firtName: String?, documentType: String?,
+                 idnumber: String?, city: String?, attachmentType: String, emailValue : String): Boolean {
+
+    if (attachment.isNullOrEmpty() || lastname.isNullOrEmpty() || firtName.isNullOrEmpty()
+        || documentType == "Seleccione un tipo de documento" || idnumber.isNullOrEmpty() || city == "ciudad"||
+        attachmentType == "Tipo de adjunto"|| emailValue.isNullOrEmpty()) {
+        Toast.makeText(
+            context,
+            "Por favor Revisa todos los campos",
+            Toast.LENGTH_SHORT
+        ).show()
+        return false
+
+    }else {
+        Toast.makeText(
+            context,
+            "Creando registro...",
+            Toast.LENGTH_SHORT
+        ).show()
+        return true
+    }
+
+
 }
 
 

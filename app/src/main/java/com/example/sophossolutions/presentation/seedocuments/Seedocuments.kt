@@ -1,4 +1,4 @@
-package com.example.sophossolutions.presentation
+package com.example.sophossolutions.presentation.seedocuments
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -11,7 +11,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.*
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -19,23 +18,18 @@ import androidx.navigation.NavController
 import com.example.sophossolutions.models.DocumentsItem
 import com.example.sophossolutions.navigation.Screen
 import com.example.sophossolutions.presentation.components.Header
-import com.example.sophossolutions.presentation.seedocuments.SeeDocumentsViewModel
 
 
 @Composable
 fun SeeDocuments(
     navController: NavController
 ) {
-
     val viewModel: SeeDocumentsViewModel = hiltViewModel()
-
     LaunchedEffect(Unit) {
         viewModel.getDocuments()
     }
     val state = viewModel.state.collectAsState().value
-
     Scaffold(
-
         topBar = {
             Box {
                 Header(name = "Ver documentos", navController = navController)
@@ -43,11 +37,8 @@ fun SeeDocuments(
 
         }
     ) {
-
         var showLoading by remember { mutableStateOf(true) }
-
         if (showLoading) {
-
             Column(
                 modifier = Modifier
                     .fillMaxSize(),
@@ -62,15 +53,12 @@ fun SeeDocuments(
                     strokeWidth = 6.dp
                 )
             }
-
         }
-
         if (!state.DocumentsItems.isNullOrEmpty()) {
 
             showLoading = false
 
-
-            LazyColumn() {
+            LazyColumn {
 
                 items(1) {
                     for (document in state.DocumentsItems!!) {
@@ -86,9 +74,7 @@ fun SeeDocuments(
 
 
     }
-
 }
-
 @Composable
 fun Document(
     document: DocumentsItem = DocumentsItem(
@@ -112,7 +98,6 @@ fun Document(
     val firstName = document.Nombre
     val lastName = document.Apellido
     val type = document.TipoAdjunto
-
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -127,17 +112,14 @@ fun Document(
 
             },
         elevation = 10.dp
-
     ) {
+        Row(
+            modifier = Modifier.fillMaxSize(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
 
-            Row(
-                modifier = Modifier.fillMaxSize(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-
-                ConstraintLayout(
-                ) {
-                    val (icon, text) = createRefs()
+            ConstraintLayout {
+                val (icon, text) = createRefs()
 
                 Column(
 
@@ -149,12 +131,10 @@ fun Document(
                         .fillMaxSize()
                         .padding(15.dp)
                 ) {
-                    Row(
-
-                    ) {
+                    Row {
 
                         Text(text = buildAnnotatedString {
-                            append(date.toString())
+                            append(date)
                             append(" - ")
                             append(type.toString())
                         })

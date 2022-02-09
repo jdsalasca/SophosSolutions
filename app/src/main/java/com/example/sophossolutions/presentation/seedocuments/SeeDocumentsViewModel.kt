@@ -16,49 +16,43 @@ import javax.inject.Inject
 @HiltViewModel
 class SeeDocumentsViewModel @Inject constructor(
     private val documentRepositoryImp: DocumentRepositoryImp
-) : ViewModel(){
+) : ViewModel() {
 
-    val state by lazy { MutableStateFlow<SeeDocumentState>(SeeDocumentState()) }
+    val state by lazy { MutableStateFlow(SeeDocumentState()) }
 
-    fun getDocuments (correo:String = "jdsalasc@unal.edu.co") {
+    fun getDocuments(correo: String = "jdsalasc@unal.edu.co") {
 
-        viewModelScope.launch (Dispatchers.IO){
-            var documents: Resource<Documents> = documentRepositoryImp.getAllDocuments(correo)
-            var response: SeeDocumentState = SeeDocumentState(documents.data?.Count,
+        viewModelScope.launch(Dispatchers.IO) {
+            val documents: Resource<Documents> = documentRepositoryImp.getAllDocuments(correo)
+            val response = SeeDocumentState(
+                documents.data?.Count,
                 documents.data?.Items, documents.data?.ScannedCount
             )
-            Log.d("Documentos", response.toString())
 
             state.value = response
 
 
-
-
-
         }
 
     }
-    val document by lazy { MutableStateFlow<SeeDocumentState>(SeeDocumentState()) }
 
-    fun getDocumentById (idRegistro: String) {
+    val document by lazy { MutableStateFlow(SeeDocumentState()) }
 
-        viewModelScope.launch (Dispatchers.IO){
-            var documents: Resource<Documents> = documentRepositoryImp.getAllDocumentsById(idRegistro)
-            var response: SeeDocumentState = SeeDocumentState(documents.data?.Count,
+    fun getDocumentById(idRegistro: String) {
+
+        viewModelScope.launch(Dispatchers.IO) {
+            val documents: Resource<Documents> =
+                documentRepositoryImp.getAllDocumentsById(idRegistro)
+            val response = SeeDocumentState(
+                documents.data?.Count,
                 documents.data?.Items, documents.data?.ScannedCount
             )
-            Log.d("Documentos id", response.toString())
 
             document.value = response
 
 
-
-
-
         }
     }
-
-
 
 
 }

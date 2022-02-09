@@ -26,16 +26,14 @@ import javax.inject.Singleton
 class DataSourceModule {
 ///getting started with MoshiConverterFactory
 
-
     @Provides
     @Singleton
     fun providesMoshi(): Moshi {
         return Moshi.Builder()
             .add(KotlinJsonAdapterFactory())
             .build()
+
     }
-
-
 
     @Singleton
     @Provides
@@ -46,14 +44,10 @@ class DataSourceModule {
             .build()
     }
 
-
-
-
     @Singleton
     @Provides
     fun restDataSource(retrofit: Retrofit): IUserDAO =
         retrofit.create(IUserDAO::class.java)
-
     @Singleton
     @Provides
     fun restDataSourceOffices(retrofit: Retrofit): IOfficeDAO =

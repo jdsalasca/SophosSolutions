@@ -10,4 +10,5 @@ interface IUserDAO {
     @GET("RS_Usuarios")
     suspend fun login (@Query("idUsuario") idUsuario: String, @Query("clave") clave: String): SSUser
 
+
 }

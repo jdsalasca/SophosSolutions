@@ -16,7 +16,9 @@ interface SSUserRepository {
 }
 
 class SSUserRespositoryImp @Inject constructor(
+
     private val iUserDAO: IUserDAO
+
 ) : SSUserRepository {
 
     override suspend fun login(idUsuario: String, clave: String): Resource<SSUser> {

@@ -1,18 +1,10 @@
 package com.example.sophossolutions.presentation.map
 
-import android.Manifest
-import android.app.Activity
-import android.content.Context
-import android.content.pm.PackageManager
-import android.location.Location
-import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Scaffold
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Business
 import androidx.compose.runtime.*
 
 import androidx.compose.ui.Modifier
@@ -20,8 +12,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -29,12 +19,9 @@ import androidx.navigation.NavController
 import com.example.sophossolutions.presentation.components.HandlePermissions
 import com.example.sophossolutions.presentation.components.Header
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
 import com.google.android.libraries.maps.CameraUpdateFactory
 import com.google.android.libraries.maps.MapView
 import com.google.android.libraries.maps.model.BitmapDescriptorFactory
-import com.google.android.libraries.maps.model.CameraPosition
 import com.google.android.libraries.maps.model.LatLng
 import com.google.android.libraries.maps.model.MarkerOptions
 
@@ -52,14 +39,14 @@ fun GoogleMaps(
     Log.d("Name of city", cityName!!)
 
 
-    var mapView = rememberMapViewWithLifeCycle()
+    val mapView = rememberMapViewWithLifeCycle()
     val viewModel: LocationViewModel = hiltViewModel()
 
     LaunchedEffect(Unit) {
         viewModel.getAllOffices()
 
     }
-    viewModel.getLocation(LocalContext.current)
+    viewModel.GetLocation(LocalContext.current)
     val state = viewModel.state.collectAsState().value
 
     LaunchedEffect(key1 = state.Count) {
@@ -83,7 +70,7 @@ fun GoogleMaps(
         ) {
 
 
-            Box() {
+            Box{
 
                 Column(
                     modifier = Modifier
@@ -104,14 +91,33 @@ fun GoogleMaps(
 
 
 
-                                    if (cityName == item.Ciudad || cityName.toString() == "Current Location") {
-                                        if (cityName.toString() == "Current Location") {
+                                    if (cityName == item.Ciudad || cityName.toString() == "Ubicación Actual") {
+                                        if (cityName.toString() == "Ubicación Actual") {
                                             it.moveCamera(
                                                 CameraUpdateFactory.newLatLngZoom(
                                                     state.location,
-                                                    it.maxZoomLevel
+                                                    it.minZoomLevel
+
+
                                                 )
                                             )
+                                            it.addMarker(
+                                                MarkerOptions().position(
+                                                    LatLng(
+                                                        state.location?.latitude!!.toDouble(),
+                                                        state.location?.longitude!!.toDouble()
+                                                    )
+                                                )
+                                                    .title("Ubicacion Actual")
+                                                    .icon(
+                                                        BitmapDescriptorFactory.defaultMarker(
+                                                            BitmapDescriptorFactory.HUE_BLUE
+                                                        )
+                                                    )
+                                            )
+
+
+
                                         } else {
                                             it.moveCamera(
                                                 CameraUpdateFactory.newLatLngZoom(
